@@ -1,0 +1,59 @@
+# Dependencies
+node_modules/
+
+# Build output
+dist/
+dist-ssr/
+*.local
+
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# Editor directories and files
+.vscode/*
+!.vscode/extensions.json
+.idea/
+*.swp
+*.swo
+*~
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Environment files
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Coverage directory
+coverage/
+
+# TypeScript cache
+*.tsbuildinfo
+
+# Vite cache
+node_modules/.vite/
+
+# Test output
+.nyc_output/
+
+# Temporary files
+tmp/
+temp/
+*.tmp
+
+# IDE specific
+*.swp
+*.swo
+.vscode/
+.idea/
+*.iml
