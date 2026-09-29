@@ -1,15 +1,18 @@
 import { AnimatePresence, motion } from 'framer-motion';
 import { useId, useState } from 'react';
-import type { Scenario } from '../../content/scenarios';
+import type { ScenarioCopy, SharedKey } from '../../i18n';
+import { useI18n } from '../../i18n';
+import { Rich } from '../../i18n/rich';
 import { useReducedMotion } from '../../lib/hooks';
 
-const TONE: Record<string, { color: string; label: string }> = {
-  good: { color: 'var(--green)', label: 'Respects her' },
-  risky: { color: 'var(--amber)', label: 'Grey area' },
-  harmful: { color: 'var(--rose)', label: 'Harmful' },
+const TONE: Record<string, { color: string; label: SharedKey }> = {
+  good: { color: 'var(--green)', label: 'toneGood' },
+  risky: { color: 'var(--amber)', label: 'toneRisky' },
+  harmful: { color: 'var(--rose)', label: 'toneHarmful' },
 };
 
-export function ScenarioCard({ scenario, index }: { scenario: Scenario; index: number }) {
+export function ScenarioCard({ scenario, index }: { scenario: ScenarioCopy; index: number }) {
+  const { t } = useI18n();
   const [picked, setPicked] = useState<string | null>(null);
   const [open, setOpen] = useState<string | null>(null);
   const uid = useId();
@@ -67,14 +70,14 @@ export function ScenarioCard({ scenario, index }: { scenario: Scenario; index: n
           maxWidth: '34ch',
         }}
       >
-        {scenario.prompt}
+        <Rich>{scenario.prompt}</Rich>
       </p>
 
       <ul style={{ listStyle: 'none', margin: 0, padding: 0, display: 'grid', gap: '0.5rem' }}>
         {scenario.choices.map((c) => {
           const isPicked = picked === c.id;
           const isOpen = visible === c.id;
-          const tone = TONE[c.tone];
+          const tone = TONE[c.tone] ?? TONE.good;
           return (
             <li key={c.id}>
               <button
@@ -121,7 +124,9 @@ export function ScenarioCard({ scenario, index }: { scenario: Scenario; index: n
                 >
                   {isPicked ? '✓' : ''}
                 </span>
-                <span style={{ fontSize: 'var(--t-small)', lineHeight: 1.5, color: 'var(--bone-2)' }}>{c.label}</span>
+                <span style={{ fontSize: 'var(--t-small)', lineHeight: 1.5, color: 'var(--bone-2)' }}>
+                  <Rich>{c.label}</Rich>
+                </span>
               </button>
 
               <AnimatePresence initial={false}>
@@ -147,10 +152,10 @@ export function ScenarioCard({ scenario, index }: { scenario: Scenario; index: n
                         className="eyebrow"
                         style={{ color: tone.color, fontSize: '0.64rem', marginBottom: '0.6rem' }}
                       >
-                        {tone.label}
+                        {t(tone.label)}
                       </p>
                       <p style={{ fontSize: 'var(--t-small)', lineHeight: 1.62, color: 'var(--bone-2)' }}>
-                        {c.outcome}
+                        <Rich>{c.outcome}</Rich>
                       </p>
                       {c.better ? (
                         <p
@@ -165,9 +170,9 @@ export function ScenarioCard({ scenario, index }: { scenario: Scenario; index: n
                           }}
                         >
                           <span className="micro" style={{ color: 'var(--green)' }}>
-                            Better move ·{' '}
+                            {t('betterMove')} ·{' '}
                           </span>
-                          {c.better}
+                          <Rich>{c.better}</Rich>
                         </p>
                       ) : null}
                     </div>
@@ -197,7 +202,7 @@ export function ScenarioCard({ scenario, index }: { scenario: Scenario; index: n
               maxWidth: '40ch',
             }}
           >
-            {scenario.takeaway}
+            <Rich>{scenario.takeaway}</Rich>
           </motion.p>
         )}
       </AnimatePresence>

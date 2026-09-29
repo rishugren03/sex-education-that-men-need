@@ -3,6 +3,7 @@ import { memo, useEffect, useMemo, useRef } from 'react';
 import * as THREE from 'three';
 import type { StageSignal } from '../components/ui/PinnedStage';
 import { projectCallouts, useCallouts, useScratch } from '../three/callouts';
+import { useI18n } from '../i18n';
 import { GroundGlow, LabRings, LightGrid } from '../three/Backdrop';
 import { curveFrom, disposeObject, loftTube } from '../three/geo';
 import { Lights, Stage3D } from '../three/Stage3D';
@@ -38,15 +39,16 @@ const XRAY = new Set([2, 4]);
 const MODEL_BASE_Y = -0.35;
 
 export function MaleScene({ progress, reduced, loader }: StageSignal) {
+  const { term } = useI18n();
   const { overlay, refs } = useCallouts([
-    { key: 'testes', label: 'Testes', side: 'left', lead: 54 },
-    { key: 'epididymis', label: 'Epididymis', side: 'right', lead: 60 },
-    { key: 'vas', label: 'Vas deferens', side: 'right', lead: 72, offsetY: 26 },
-    { key: 'bladder', label: 'Bladder', side: 'left', lead: 62 },
-    { key: 'vesicles', label: 'Seminal vesicles', side: 'right', lead: 80, offsetY: -22 },
-    { key: 'prostate', label: 'Prostate', side: 'left', lead: 68, offsetY: 30 },
-    { key: 'urethra', label: 'Urethra', side: 'right', lead: 66 },
-    { key: 'penis', label: 'Penis', side: 'right', lead: 58 },
+    { key: 'testes', label: term('term.testes'), side: 'left', lead: 54 },
+    { key: 'epididymis', label: term('term.epididymis'), side: 'right', lead: 60 },
+    { key: 'vas', label: term('term.vas'), side: 'right', lead: 72, offsetY: 26 },
+    { key: 'bladder', label: term('term.bladder'), side: 'left', lead: 62 },
+    { key: 'vesicles', label: term('term.vesicles'), side: 'right', lead: 80, offsetY: -22 },
+    { key: 'prostate', label: term('term.prostate'), side: 'left', lead: 68, offsetY: 30 },
+    { key: 'urethra', label: term('term.urethra'), side: 'right', lead: 66 },
+    { key: 'penis', label: term('term.penis'), side: 'right', lead: 58 },
   ]);
 
   return (

@@ -1,6 +1,9 @@
 import { motion, useScroll, useSpring } from 'framer-motion';
 import { useEffect, useMemo, useState } from 'react';
 import { CHAPTERS } from '../../content/chapters';
+import { useI18n } from '../../i18n';
+import { useChapterMeta } from '../../i18n/meta';
+import { LOCALES } from '../../i18n/types';
 import { useReducedMotion, getMotionOverride, setMotionOverride } from '../../lib/hooks';
 import { ACCENTS } from '../ui/primitives';
 
@@ -58,6 +61,7 @@ function useActiveChapter() {
 
 function MotionToggle() {
   const reduced = useReducedMotion();
+  const { t } = useI18n();
   const [, force] = useState(0);
   return (
     <button
@@ -66,8 +70,8 @@ function MotionToggle() {
         setMotionOverride(reduced ? 'on' : 'off');
         force((n) => n + 1);
       }}
-      aria-label={reduced ? 'Motion is reduced. Turn animation on.' : 'Animation is on. Turn motion off.'}
-      title={reduced ? 'Motion off' : 'Motion on'}
+      aria-label={reduced ? t('motionToggleOff') : t('motionToggleOn')}
+      title={reduced ? t('motionOff') : t('motionOn')}
       style={{
         font: 'inherit',
         cursor: 'pointer',
@@ -98,13 +102,69 @@ function MotionToggle() {
   );
 }
 
+/**
+ * Language choice sits at the very top of the lesson, in both the desktop rail
+ * and the mobile bar, so it is reachable before any scrolling. A segmented pair
+ * of real buttons: the current language is `aria-pressed`, not merely styled.
+ */
+function LanguageToggle({ compact = false }: { compact?: boolean }) {
+  const { locale, setLocale, t } = useI18n();
+  return (
+    <div
+      role="group"
+      aria-label={t('navLanguage')}
+      style={{
+        display: 'inline-flex',
+        alignItems: 'center',
+        gap: 2,
+        padding: 2,
+        border: '1px solid var(--line)',
+        borderRadius: 999,
+        background: 'rgba(255,255,255,0.02)',
+      }}
+    >
+      {LOCALES.map((l) => {
+        const on = l.code === locale;
+        return (
+          <button
+            key={l.code}
+            type="button"
+            lang={l.lang}
+            onClick={() => setLocale(l.code)}
+            aria-pressed={on}
+            title={compact ? l.native : `${l.label} (${l.native})`}
+            style={{
+              font: 'inherit',
+              cursor: 'pointer',
+              border: 0,
+              borderRadius: 999,
+              padding: compact ? '0.22rem 0.5rem' : '0.24rem 0.62rem',
+              fontSize: compact ? '0.72rem' : '0.76rem',
+              lineHeight: 1.2,
+              whiteSpace: 'nowrap',
+              color: on ? 'var(--ink)' : 'var(--bone-3)',
+              background: on ? 'var(--bone)' : 'transparent',
+              transition: 'background .25s, color .25s',
+            }}
+          >
+            {l.native}
+          </button>
+        );
+      })}
+    </div>
+  );
+}
+
 export function Chrome() {
   const active = useActiveChapter();
+  const { t } = useI18n();
+  const meta = useChapterMeta();
   const { scrollYProgress } = useScroll();
   const bar = useSpring(scrollYProgress, { stiffness: 120, damping: 30, mass: 0.4 });
   const reduced = useReducedMotion();
 
   const current = CHAPTERS[active] ?? CHAPTERS[0];
+  const currentMeta = meta(current.id);
   const jump = (i: number) => {
     const node = document.querySelectorAll<HTMLElement>('[data-chapter]')[i];
     if (node) {
@@ -134,7 +194,7 @@ export function Chrome() {
 
       {/* ── Desktop rail ── */}
       <nav
-        aria-label="Chapters"
+        aria-label={t('navChapters')}
         className="chrome-rail"
         style={{
           position: 'fixed',
@@ -145,6 +205,9 @@ export function Chrome() {
           display: 'none',
         }}
       >
+        <div style={{ marginBottom: '1.1rem' }}>
+          <LanguageToggle />
+        </div>
         <ul style={{ listStyle: 'none', margin: 0, padding: 0, display: 'grid', gap: '0.1rem' }}>
           {dots.map((c, i) => {
             const on = i === active;
@@ -154,7 +217,7 @@ export function Chrome() {
                   type="button"
                   onClick={() => jump(i)}
                   aria-current={on ? 'true' : undefined}
-                  title={`${ROMAN[i]} — ${c.short}`}
+                  title={`${ROMAN[i]} — ${meta(c.id).short}`}
                   style={{
                     display: 'flex',
                     alignItems: 'center',
@@ -190,7 +253,7 @@ export function Chrome() {
                       transition: 'opacity .4s, transform .4s',
                     }}
                   >
-                    {ROMAN[i]} {c.short.toUpperCase()}
+                    {ROMAN[i]} {meta(c.id).short.toUpperCase()}
                   </span>
                 </button>
               </li>
@@ -236,10 +299,11 @@ export function Chrome() {
               textOverflow: 'ellipsis',
             }}
           >
-            {current.short.toUpperCase()}
+            {currentMeta.short.toUpperCase()}
           </span>
         </div>
-        <span style={{ pointerEvents: 'auto' }}>
+        <span style={{ pointerEvents: 'auto', display: 'inline-flex', alignItems: 'center', gap: '0.5rem' }}>
+          <LanguageToggle compact />
           <MotionToggle />
         </span>
       </div>
@@ -251,4 +315,4 @@ export function Chrome() {
   );
 }
 
-export { ROMAN, useActiveChapter, MotionToggle, getMotionOverride };
+export { ROMAN, useActiveChapter, MotionToggle, LanguageToggle, getMotionOverride };

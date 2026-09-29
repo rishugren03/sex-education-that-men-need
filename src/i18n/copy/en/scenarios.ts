@@ -1,34 +1,14 @@
-export type Choice = {
-  id: string;
-  /** The option text the reader taps. */
-  label: string;
-  /** short tag: 'good' | 'risky' | 'harmful' */
-  tone: 'good' | 'risky' | 'harmful';
-  /** What actually happens because of this choice. */
-  outcome: string;
-  /** The better move, plainly stated. */
-  better?: string;
-};
+import type { ScenarioCopy } from '../../types';
 
-export type Scenario = {
-  id: string;
-  chapter: string;
-  /** "Metro, 8:40 pm" — the setting, set in small mono caps. */
-  where: string;
-  /** The situation, written in second person. */
-  prompt: string;
-  choices: Choice[];
-  /** One-line takeaway that appears after the reader engages. */
-  takeaway: string;
-};
-
-export const SCENARIOS: Scenario[] = [
+/** Every scenario rendered in the "Real-life situations" chapter. */
+export const scenarios: ScenarioCopy[] = [
   {
     id: 'metro',
     chapter: 'Public space',
     where: 'Metro, 8:40 pm',
     prompt: 'A girl you find really attractive is in the same coach. She gets off at the next station.',
-    takeaway: 'Noticing is involuntary. Staring, following and blocking are choices — and only one of those is yours to make freely.',
+    takeaway:
+      'Noticing is involuntary. Staring, following and blocking are choices — and only one of those is yours to make freely.',
     choices: [
       {
         id: 'a',
@@ -43,7 +23,8 @@ export const SCENARIOS: Scenario[] = [
         tone: 'risky',
         outcome:
           'People notice being watched, and it lands badly on almost everyone. If she clocks it, she spends the rest of the journey feeling watched, not admired. You got nothing out of it.',
-        better: 'One glance is fine. A sustained look is a small thing that makes someone feel unsafe, and "I didn\'t do anything" is not the point.',
+        better:
+          'One glance is fine. A sustained look is a small thing that makes someone feel unsafe, and "I didn\'t do anything" is not the point.',
       },
       {
         id: 'c',
@@ -51,7 +32,8 @@ export const SCENARIOS: Scenario[] = [
         tone: 'harmful',
         outcome:
           'This is following a stranger, and it is exactly how harassment starts. It is not romance and it is not a coincidence — she did not agree to be followed, and the fear it creates is the harm.',
-        better: 'Attraction does not make a public space private. If you want to talk to someone, that requires a normal social situation where she can say no.',
+        better:
+          'Attraction does not make a public space private. If you want to talk to someone, that requires a normal social situation where she can say no.',
       },
     ],
   },
@@ -156,7 +138,8 @@ export const SCENARIOS: Scenario[] = [
     chapter: 'Periods',
     where: 'A group chat',
     prompt: 'Your friend says: "Bro, girls always bleed the first time. That\'s how you know it\'s real."',
-    takeaway: 'This is one of the most damaging myths still circulating, and it comes from people who were never taught anything either.',
+    takeaway:
+      'This is one of the most damaging myths still circulating, and it comes from people who were never taught anything either.',
     choices: [
       {
         id: 'a',
@@ -202,7 +185,8 @@ export const SCENARIOS: Scenario[] = [
         tone: 'harmful',
         outcome:
           'Cramping, hormone shifts, disrupted sleep and genuine pain are not a personality defect. "You are being irrational" is the fastest way to make her stop telling you things.',
-        better: 'Pain is not irrationality. If her pain is severe enough to stop her functioning, that is a doctor conversation, not an attitude conversation.',
+        better:
+          'Pain is not irrationality. If her pain is severe enough to stop her functioning, that is a doctor conversation, not an attitude conversation.',
       },
       {
         id: 'c',
@@ -393,7 +377,7 @@ export const SCENARIOS: Scenario[] = [
         label: 'Get on a video call with a random person, or message someone I like intensely.',
         tone: 'harmful',
         outcome:
-          'An intense hookup with someone who did not choose you, or pressuring someone you like into something she has not agreed to, turns a private urge into someone else\'s problem. Heres the test: would you be comfortable if she did the exact same thing to you?',
+          'An intense hookup with someone who did not choose you, or pressuring someone you like into something she has not agreed to, turns a private urge into someone else\'s problem. Here is the test: would you be comfortable if she did the exact same thing to you?',
         better: 'Release the pressure somewhere that involves nobody else\'s consent.',
       },
       {
@@ -407,7 +391,8 @@ export const SCENARIOS: Scenario[] = [
   },
 ];
 
-export const CONSENT_SCENARIOS: Scenario[] = [
+/** The five scenarios drilled in the Consent chapter. */
+export const consentScenarios: ScenarioCopy[] = [
   {
     id: 'stop-now',
     chapter: 'Consent',

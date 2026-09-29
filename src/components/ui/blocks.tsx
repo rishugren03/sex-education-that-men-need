@@ -1,4 +1,5 @@
 import type { ReactNode } from 'react';
+import { useI18n } from '../../i18n';
 import { Reveal } from './primitives';
 
 export function ChapterMark({ n, accent = 'cyan', label }: { n: number; accent?: string; label?: string }) {
@@ -53,11 +54,12 @@ export function DoDont({
   do: ReactNode[];
   accent?: 'green' | 'cyan' | 'amber';
 }) {
+  const { t } = useI18n();
   return (
     <div className="dodont">
       <Reveal>
         <div className="dodont__col">
-          <h4 style={{ color: 'var(--rose)' }}>✕ Don&apos;t</h4>
+          <h4 style={{ color: 'var(--rose)' }}>✕ {t('dontLabel')}</h4>
           <ul>
             {dont.map((d, i) => (
               <li key={i}>
@@ -70,7 +72,7 @@ export function DoDont({
       </Reveal>
       <Reveal delay={0.08}>
         <div className="dodont__col">
-          <h4 style={{ color: `var(--${accent})` }}>✓ Do</h4>
+          <h4 style={{ color: `var(--${accent})` }}>✓ {t('doLabel')}</h4>
           <ul>
             {doItems.map((d, i) => (
               <li key={i}>
@@ -141,11 +143,12 @@ export function Compare({
 }
 
 export function Sources({ items }: { items: string[] }) {
+  const { t } = useI18n();
   return (
     <Reveal>
       <div style={{ borderTop: '1px solid var(--line-soft)', paddingTop: '1.1rem', maxWidth: 'var(--measure)' }}>
         <p className="eyebrow" style={{ marginBottom: '0.7rem', fontSize: '0.64rem' }}>
-          Based on
+          {t('sourcesLabel')}
         </p>
         <p className="micro" style={{ lineHeight: 1.7 }}>
           {items.join(' · ')}

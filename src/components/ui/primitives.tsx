@@ -1,5 +1,6 @@
 import { motion, useReducedMotion as useFramerReduced } from 'framer-motion';
 import type { ReactNode } from 'react';
+import { useI18n } from '../../i18n';
 import { useReducedMotion } from '../../lib/hooks';
 
 export const ACCENTS: Record<string, string> = {
@@ -51,18 +52,21 @@ export function Statement({
   size = 'h1',
   className = '',
   delay = 0,
-  accentWord,
+  accent,
+  accentColor = 'cyan',
 }: {
   children: ReactNode;
   size?: 'h1' | 'h2' | 'h3';
   className?: string;
   delay?: number;
-  accentWord?: string;
+  /** Trailing clause rendered in the chapter accent. */
+  accent?: string;
+  /** Which palette entry colours the trailing clause. Defaults to cyan. */
+  accentColor?: keyof typeof ACCENTS;
 }) {
   const reduced = useReducedMotion();
   const Cmp = motion[size] as typeof motion.h1;
   const sizeClass = size === 'h1' ? 'var(--t-h1)' : size === 'h2' ? 'var(--t-h2)' : 'var(--t-h3)';
-  const parts = accentWord ? splitAccent(children, accentWord) : null;
   return (
     <Cmp
       className={`serif ${className}`}
@@ -72,25 +76,10 @@ export function Statement({
       viewport={{ once: true, margin: '-10% 0px -10% 0px' }}
       transition={{ duration: reduced ? 0.25 : 1, delay, ease: [0.16, 1, 0.3, 1] }}
     >
-      {parts ? (
-        <>
-          {parts.before}
-          <em style={{ color: ACCENTS.cyan, fontStyle: 'italic' }}>{parts.word}</em>
-          {parts.after}
-        </>
-      ) : (
-        children
-      )}
+      {children}
+      {accent ? <em style={{ color: ACCENTS[accentColor], fontStyle: 'italic' }}> {accent}</em> : null}
     </Cmp>
   );
-}
-
-function splitAccent(text: ReactNode, word: string) {
-  const s = typeof text === 'string' ? text : null;
-  if (!s) return null;
-  const i = s.indexOf(word);
-  if (i === -1) return null;
-  return { before: s.slice(0, i), word: s.slice(i, i + word.length), after: s.slice(i + word.length) };
 }
 
 export function Lede({ children, delay = 0.1 }: { children: ReactNode; delay?: number }) {
@@ -193,12 +182,14 @@ export function Rule({ style }: { style?: React.CSSProperties }) {
 }
 
 /** Scroll cue used at the very top. */
-export function ScrollCue({ label = 'Scroll' }: { label?: string }) {
+export function ScrollCue({ label }: { label?: string }) {
   const reduced = useFramerReduced();
+  const { t } = useI18n();
+  const text = label ?? t('scrollCue');
   return (
     <div style={{ display: 'flex', alignItems: 'center', gap: '0.7rem' }} aria-hidden="true">
       <span className="micro" style={{ letterSpacing: '0.2em', textTransform: 'uppercase' }}>
-        {label}
+        {text}
       </span>
       <span
         style={{

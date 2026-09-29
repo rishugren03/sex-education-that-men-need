@@ -3,6 +3,7 @@ import { memo, useEffect, useMemo, useRef } from 'react';
 import * as THREE from 'three';
 import type { StageSignal } from '../components/ui/PinnedStage';
 import { projectCallouts, useCallouts, useScratch } from '../three/callouts';
+import { useI18n } from '../i18n';
 import { GroundGlow, LabRings, LightGrid } from '../three/Backdrop';
 import { disposeObject } from '../three/geo';
 import { Lights, Stage3D } from '../three/Stage3D';
@@ -34,9 +35,10 @@ function sampleCams(c: number) {
 }
 
 export function TransmissionScene({ progress, reduced, loader }: StageSignal) {
+  const { term } = useI18n();
   const { overlay, refs } = useCallouts([
-    { key: 'transmission', label: 'Transmission path', side: 'left', lead: 70 },
-    { key: 'barrier', label: 'Condom barrier', side: 'right', lead: 64 },
+    { key: 'transmission', label: term('term.transmission'), side: 'left', lead: 70 },
+    { key: 'barrier', label: term('term.barrier'), side: 'right', lead: 64 },
   ]);
 
   return (

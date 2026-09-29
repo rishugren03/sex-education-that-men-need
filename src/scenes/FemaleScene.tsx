@@ -3,6 +3,7 @@ import { memo, useEffect, useMemo, useRef } from 'react';
 import * as THREE from 'three';
 import type { StageSignal } from '../components/ui/PinnedStage';
 import { projectCallouts, useCallouts, useScratch } from '../three/callouts';
+import { useI18n } from '../i18n';
 import { GroundGlow, LabRings, LightGrid } from '../three/Backdrop';
 import { curveFrom, disposeObject, loftTube } from '../three/geo';
 import { Lights, Stage3D } from '../three/Stage3D';
@@ -67,14 +68,15 @@ const EXPLODE: Record<PartKey, [number, number, number]> = {
 };
 
 export function FemaleScene({ progress, reduced, loader }: StageSignal) {
+  const { term } = useI18n();
   const { overlay, refs } = useCallouts([
-    { key: 'ovaries', label: 'Ovaries', side: 'right', lead: 56 },
-    { key: 'tubes', label: 'Fallopian tubes', side: 'right', lead: 72, offsetY: 24 },
-    { key: 'uterus', label: 'Uterus', side: 'left', lead: 62 },
-    { key: 'cervix', label: 'Cervix', side: 'left', lead: 58, offsetY: -20 },
-    { key: 'vagina', label: 'Vagina', side: 'right', lead: 60 },
-    { key: 'vulva', label: 'Vulva (external)', side: 'right', lead: 70 },
-    { key: 'clitoris', label: 'Clitoris', side: 'left', lead: 66 },
+    { key: 'ovaries', label: term('term.ovaries'), side: 'right', lead: 56 },
+    { key: 'tubes', label: term('term.tubes'), side: 'right', lead: 72, offsetY: 24 },
+    { key: 'uterus', label: term('term.uterus'), side: 'left', lead: 62 },
+    { key: 'cervix', label: term('term.cervix'), side: 'left', lead: 58, offsetY: -20 },
+    { key: 'vagina', label: term('term.vagina'), side: 'right', lead: 60 },
+    { key: 'vulva', label: term('term.vulva'), side: 'right', lead: 70 },
+    { key: 'clitoris', label: term('term.clitoris'), side: 'left', lead: 66 },
   ]);
 
   return (

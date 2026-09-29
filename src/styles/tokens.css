@@ -55,8 +55,21 @@
   --sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
   --mono: 'JetBrains Mono', ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
 
+  /* Devanagari companions. Latin faces carry no Indic coverage, so any locale
+     that needs it swaps these in wholesale rather than relying on fallback. */
+  --serif-deva: 'Noto Serif Devanagari', 'Noto Sans Devanagari', Georgia, serif;
+  --sans-deva: 'Noto Sans Devanagari', -apple-system, 'Segoe UI', sans-serif;
+
   --rail-w: 0px;
   --topbar-h: 3rem;
+}
+
+/* Hindi: Devanagari needs more vertical room, no negative tracking, and
+   tracking-free micro labels — letter-spacing tears conjuncts apart. */
+html[data-locale='hi'] {
+  --serif: var(--serif-deva);
+  --sans: var(--sans-deva);
+  --mono: var(--sans-deva);
 }
 
 @media (min-width: 900px) {

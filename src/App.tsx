@@ -1,6 +1,7 @@
 import { lazy, Suspense, useEffect } from 'react';
 import { Chrome } from './components/shell/Chrome';
 import { SmoothScroll } from './components/shell/SmoothScroll';
+import { LocaleProvider, useI18n } from './i18n';
 import { useScrollRestoration } from './lib/hooks';
 
 const Intro = lazy(() => import('./chapters/Intro').then((m) => ({ default: m.Intro })));
@@ -25,8 +26,20 @@ function Skeleton() {
   return <div style={{ minHeight: '100svh' }} aria-hidden="true" />;
 }
 
-export function App() {
+/** Keeps the document head in the reader's language, not just the body. */
+function DocumentMeta() {
+  const { t } = useI18n();
+  useEffect(() => {
+    document.title = t('docTitle');
+    const meta = document.querySelector('meta[name="description"]');
+    if (meta) meta.setAttribute('content', t('docDescription'));
+  }, [t]);
+  return null;
+}
+
+function Lesson() {
   useScrollRestoration();
+  const { t } = useI18n();
 
   useEffect(() => {
     document.body.classList.add('grain');
@@ -35,8 +48,9 @@ export function App() {
 
   return (
     <SmoothScroll>
+      <DocumentMeta />
       <a className="skip-link" href="#your-body">
-        Skip to the lesson
+        {t('skipToLesson')}
       </a>
       <Chrome />
       <main>
@@ -61,5 +75,13 @@ export function App() {
         </Suspense>
       </main>
     </SmoothScroll>
+  );
+}
+
+export function App() {
+  return (
+    <LocaleProvider>
+      <Lesson />
+    </LocaleProvider>
   );
 }

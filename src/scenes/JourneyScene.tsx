@@ -3,6 +3,7 @@ import { memo, useEffect, useMemo, useRef } from 'react';
 import * as THREE from 'three';
 import type { StageSignal } from '../components/ui/PinnedStage';
 import { projectCallouts, useCallouts, useScratch } from '../three/callouts';
+import { useI18n } from '../i18n';
 import { GroundGlow, LabRings, LightGrid } from '../three/Backdrop';
 import { curveFrom, disposeObject, loftTube } from '../three/geo';
 import { Lights, Stage3D } from '../three/Stage3D';
@@ -45,11 +46,12 @@ const STEP_PARTS: Partial<Record<number, PartKey[]>> = {
 };
 
 export function JourneyScene({ progress, reduced, loader }: StageSignal) {
+  const { term } = useI18n();
   const { overlay, refs } = useCallouts([
-    { key: 'sperm', label: 'Sperm', side: 'left', lead: 56 },
-    { key: 'egg', label: 'Egg (ovum)', side: 'right', lead: 62 },
-    { key: 'embryo', label: 'Embryo', side: 'right', lead: 58, offsetY: 28 },
-    { key: 'uterus', label: 'Uterine wall', side: 'left', lead: 64 },
+    { key: 'sperm', label: term('term.sperm'), side: 'left', lead: 56 },
+    { key: 'egg', label: term('term.egg'), side: 'right', lead: 62 },
+    { key: 'embryo', label: term('term.embryo'), side: 'right', lead: 58, offsetY: 28 },
+    { key: 'uterus', label: term('term.uterineWall'), side: 'left', lead: 64 },
   ]);
 
   return (

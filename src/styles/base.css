@@ -113,6 +113,51 @@ a {
   line-height: 1.55;
 }
 
+/* ── Devanagari ─────────────────────────────────────────── */
+/* Latin display tracking is destructive in Devanagari: negative letter-spacing
+   collides matras and the headline faces lose their vertical rhythm. */
+html[data-locale='hi'] body {
+  line-height: 1.78;
+  letter-spacing: 0;
+}
+
+html[data-locale='hi'] h1,
+html[data-locale='hi'] h2,
+html[data-locale='hi'] h3,
+html[data-locale='hi'] h4 {
+  line-height: 1.32;
+  letter-spacing: 0;
+  font-weight: 500;
+}
+
+html[data-locale='hi'] .serif {
+  letter-spacing: 0;
+}
+
+html[data-locale='hi'] .eyebrow {
+  letter-spacing: 0.04em;
+  text-transform: none;
+  font-weight: 500;
+}
+
+html[data-locale='hi'] .micro {
+  letter-spacing: 0.02em;
+}
+
+html[data-locale='hi'] .lede {
+  line-height: 1.72;
+  letter-spacing: 0;
+}
+
+/* Display sizes are tuned for Latin cap-height; Devanagari needs to be smaller
+   to keep a comparable measure. */
+html[data-locale='hi'] {
+  --t-h1: clamp(1.7rem, 6.4vw, 4rem);
+  --t-h2: clamp(1.4rem, 4.6vw, 2.7rem);
+  --t-h3: clamp(1.12rem, 3.4vw, 1.8rem);
+  --t-display: clamp(2.1rem, 9vw, 6.5rem);
+}
+
 /* ── Layout ─────────────────────────────────────────────── */
 .shell {
   position: relative;
